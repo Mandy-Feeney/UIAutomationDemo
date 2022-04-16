@@ -20,27 +20,18 @@ public class SeleniumDriver
 
     public IWebDriver Initialize(SeleniumBrowserType browserType)
     {
-        IWebDriver? driver = null;
-
-        switch (browserType)
+        IWebDriver? driver = browserType switch
         {
-            case SeleniumBrowserType.Chrome:
-                driver = new ChromeDriver();
-                break;
-            case SeleniumBrowserType.Firefox:
-                driver = new FirefoxDriver();
-                break;
-            case SeleniumBrowserType.Edge:
-                driver = new EdgeDriver();
-                break;
-            case SeleniumBrowserType.Safari:
-                driver = new SafariDriver();
-                break;
-            default:
-                throw new ArgumentException(nameof(browserType));
-        }
+            SeleniumBrowserType.Chrome => new ChromeDriver(),
+            SeleniumBrowserType.Firefox => new FirefoxDriver(),
+            SeleniumBrowserType.Edge => new EdgeDriver(),
+            SeleniumBrowserType.Safari => new SafariDriver(),
+            _ => throw new ArgumentException("Browser not supported", nameof(browserType)),
+        };
 
         WebDriver = driver;
-        return driver;
+        WebDriver.Manage().Window.Maximize();
+
+        return WebDriver;
     }
 }

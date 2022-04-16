@@ -19,24 +19,18 @@ public class PlaywrightDriver
     public async Task<IPage> Initialize(PlaywrightBrowserType browserType, BrowserTypeLaunchOptions launchOptions)
     {
         _playwright = await Playwright.CreateAsync();
-        _browser = null;
-
-        switch(browserType)
+        IBrowser browser = browserType switch
         {
-            case PlaywrightBrowserType.Chromium:
-                _browser = await _playwright.Chromium.LaunchAsync(launchOptions);
-                break;
-            case PlaywrightBrowserType.Firefox:
-                _browser = await _playwright.Firefox.LaunchAsync(launchOptions);
-                break;
-            case PlaywrightBrowserType.Webkit:
-                _browser = await _playwright.Webkit.LaunchAsync(launchOptions);
-                break;
-            default: 
-                throw new ArgumentException(nameof(browserType));
-        }
+            PlaywrightBrowserType.Chromium => await _playwright.Chromium.LaunchAsync(launchOptions),
+            PlaywrightBrowserType.Firefox => await _playwright.Firefox.LaunchAsync(launchOptions),
+            PlaywrightBrowserType.Webkit => await _playwright.Webkit.LaunchAsync(launchOptions),
+            _ => throw new ArgumentException("Browser not supported", nameof(browserType)),
+        };
 
-        Page = await _browser.NewPageAsync();
+        _browser = browser;
+        Page = await browser.NewPageAsync();
+        await Page.SetViewportSizeAsync(1280, 960);
+
         return Page;
     }
 

@@ -2,20 +2,17 @@
 
 namespace UIAutomationDemo.Specs.Pages.Selenium;
 
-public class InputFieldPage
+public class InputFieldPage : BasePage
 {
     private static string Url => "https://letcode.in/edit";
 
-    private readonly IWebDriver _driver;
     private static By FullNameField => By.Id("fullName");
     private static By AppendTextField => By.Id("join");
     private static By ClearField => By.Id("clearMe");
     private static By DisabledField => By.Id("noEdit");
     private static By ReadonlyField => By.Id("dontwrite");
 
-    public InputFieldPage(IWebDriver driver) => _driver = driver;
-
-    public void Goto() => _driver.Navigate().GoToUrl(Url);
+    public InputFieldPage(IWebDriver driver) : base(driver, Url) { }
 
     public void EnterFullName(string text)
     {

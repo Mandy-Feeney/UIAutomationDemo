@@ -2,20 +2,17 @@
 
 namespace UIAutomationDemo.Specs.Pages.Playwright;
 
-public class InputFieldPage
+public class InputFieldPage : BasePage
 {
     private static string Url => "https://letcode.in/edit";
 
-    private readonly IPage _page;
     private static string FullNameField => "#fullName";
     private static string AppendTextField => "#join";
     private static string ClearField => "#clearMe";
     private static string DisabledField => "#noEdit";
     private static string ReadonlyField => "#dontwrite";
 
-    public InputFieldPage(IPage page) => _page = page;
-
-    public async Task Goto() => await _page.GotoAsync(Url);
+    public InputFieldPage(IPage page) : base(page, Url) { }
 
     public async Task EnterFullName(string text) => await _page.FillAsync(FullNameField, text);
 
